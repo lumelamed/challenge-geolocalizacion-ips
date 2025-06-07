@@ -1,6 +1,7 @@
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +12,8 @@ builder.Configuration.AddEnvironmentVariables();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 var redisConnection = builder.Configuration.GetConnectionString("Redis") ?? string.Empty;
 
-// Configurar Entity Framework
 builder.Services.AddInfrastructure(connectionString);
 
-// Configurar Redis
 builder.Services.AddSingleton<IConnectionMultiplexer>(provider =>
 {
     var configuration = ConfigurationOptions.Parse(redisConnection);
@@ -28,7 +27,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -36,10 +34,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.ApplyMigration();
+app.UseCustomExceptionHandler();
+
 app.UseAuthorization();
 app.MapControllers();
 
-// Crear base de datos si no existe
+// Create DB if it does not exist
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
