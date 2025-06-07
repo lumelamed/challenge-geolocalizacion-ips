@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-namespace Infrastructure
+﻿namespace Infrastructure
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure(
