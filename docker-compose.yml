@@ -1,0 +1,70 @@
+services:
+  # API .NET
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME}-webapp
+    ports:
+      - "8080:80"
+      #- "8443:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=http://+:80 #;https://+:443
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
+      - ConnectionStrings__Redis=redis:6379;
+    depends_on:
+      sqlserver:
+        condition: service_started # service_healthy
+      redis:
+        condition: service_started #service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ${COMPOSE_PROJECT_NAME}-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_PASSWORD}
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - app-network
+    restart: unless-stopped
+    # healthcheck:
+    #     test: ["CMD-SHELL", "echo 'SELECT 1' | /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P \"$DB_PASSWORD\""]
+    #     interval: 30s
+    #     timeout: 10s
+    #     retries: 5
+    #     start_period: 60s
+
+  # Redis para caché
+  redis:
+    image: redis:7-alpine
+    container_name: ${COMPOSE_PROJECT_NAME}-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    # healthcheck:
+    #   test: ["CMD", "redis-cli", "ping"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+
+volumes:
+  sqlserver_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge
