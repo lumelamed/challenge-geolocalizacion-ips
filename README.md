@@ -34,7 +34,6 @@ El proyecto implementa **Clean Architecture** con las siguientes capas:
 - **SQL Server**
 - **Redis** (caché)
 - **AutoMapper**
-- **Serilog** (logging estructurado)
 - **Docker**
 - **NUnit** (testing)
 
@@ -170,33 +169,6 @@ dotnet test --collect:"XPlat Code Coverage"
 - **Tests de Integración**: Controllers y servicios externos
 - **Mocks**: Para APIs externas y bases de datos
 
-## 📊 Logging
-
-La aplicación utiliza **Serilog** para logging estructurado con:
-
-- **Logs en consola** durante desarrollo
-- **Logs en archivos** para producción (rolling files)
-- **Información contextual** (IP, tiempo de respuesta, errores)
-- **Niveles configurables** (Debug, Info, Warning, Error)
-
-Ejemplo de configuración en `appsettings.json`:
-```json
-{
-  "Serilog": {
-    "MinimumLevel": "Information",
-    "WriteTo": [
-      { "Name": "Console" },
-      { 
-        "Name": "File", 
-        "Args": { 
-          "path": "logs/api-.txt",
-          "rollingInterval": "Day"
-        }
-      }
-    ]
-  }
-}
-```
 
 ## 📊 Características Técnicas
 
