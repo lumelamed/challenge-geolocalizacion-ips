@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Cache\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -11,9 +11,9 @@
         // Maybe in the future this could be another entity
         public string? Languages { get; set; }
 
-        required public decimal Latitude { get; set; }
+        required public double Latitude { get; set; }
 
-        required public decimal Longitude { get; set; }
+        required public double Longitude { get; set; }
 
         required public string Currency { get; set; }
 
