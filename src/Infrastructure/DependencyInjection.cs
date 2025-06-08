@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure
 {
-    using Domain.Abstractions;
+    using Domain.Interfaces;
     using Infrastructure.Repositories;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +16,8 @@
                 options.UseSqlServer(connectionString);
             });
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IIpInfoRepository, IpInfoRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
 
             return services;
         }

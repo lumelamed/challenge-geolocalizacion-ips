@@ -1,33 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-
-namespace Infrastructure;
-
-public sealed class ApplicationDbContext : DbContext
+﻿namespace Infrastructure
 {
-    public ApplicationDbContext(DbContextOptions options)
-        : base(options)
-    {
-    }
+    using Domain.Entities;
+    using Microsoft.EntityFrameworkCore;
 
-    // public DbSet<NombreEntidad> Entidad { get; set; }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public sealed class ApplicationDbContext : DbContext
     {
-        try
+        public ApplicationDbContext(DbContextOptions options)
+            : base(options)
         {
-            return await base.SaveChangesAsync(cancellationToken);
         }
-        catch (Exception ex)
-        {
-            throw new Exception("No se pudieron guardar los cambios en la base de datos", ex);
-        }
-    }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        base.OnModelCreating(modelBuilder);
+        public DbSet<Country> Country { get; set; }
+
+        public DbSet<IpInfo> IpInfo { get; set; }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                return await base.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudieron guardar los cambios en la base de datos", ex);
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
