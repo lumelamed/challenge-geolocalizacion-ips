@@ -5,6 +5,9 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+# Instalar herramientas necesarias solo en build
+RUN apt-get update && apt-get install -y curl iputils-ping dnsutils
+
 # Copiar solution file y archivos de proyecto
 COPY *.sln .
 COPY src/Domain/*.csproj ./src/Domain/

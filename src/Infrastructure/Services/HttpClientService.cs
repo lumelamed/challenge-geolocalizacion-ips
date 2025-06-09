@@ -1,19 +1,22 @@
 ﻿namespace Infrastructure.Services
 {
+    using Infrastructure.Exceptions;
+    using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json.Linq;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Infrastructure.Exceptions;
-    using Microsoft.AspNetCore.WebUtilities;
-    using Newtonsoft.Json.Linq;
 
     public class HttpClientService
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly ILogger<HttpClientService> logger;
 
-        public HttpClientService(IHttpClientFactory httpClientFactory)
+        public HttpClientService(IHttpClientFactory httpClientFactory, ILogger<HttpClientService> logger)
         {
             this.httpClientFactory = httpClientFactory;
+            this.logger = logger;
         }
 
         public async Task<JObject?> GetRawJsonAsync(
@@ -30,6 +33,8 @@
                 url = QueryHelpers.AddQueryString(url, queryParams);
             }
 
+            this.logger.LogWarning($"HttpClientService request: {url}");
+
             using var response = await client.GetAsync(url);
             string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -42,6 +47,8 @@
             {
                 throw new ExternalServiceException($"Respuesta vacía de {clientName}");
             }
+
+            this.logger.LogWarning($"HttpClientService response: {apiResponse}");
 
             return JObject.Parse(apiResponse);
         }
