@@ -32,10 +32,12 @@ El proyecto implementa **Clean Architecture** con las siguientes capas:
 - **Swagger/OpenAPI** (documentación interactiva)
 - **Entity Framework Core**
 - **SQL Server**
-- **Redis** (caché)
-- **AutoMapper**
 - **Docker**
 - **NUnit** (testing)
+
+A futuro podría agregarse
+- **Redis** (caché)
+- **AutoMapper**
 
 ## 🔌 APIs Externas
 
@@ -109,21 +111,24 @@ GET /api/iplocation/{ip}
 **Ejemplo de respuesta:**
 ```json
 {
-  "ip": "83.44.196.93",
-  "country": {
-    "name": "España",
-    "isoCode": "ES"
-  },
-  "languages": ["Español (es)"],
-  "currentTimes": ["21:01:23 (UTC+01:00)"],
-  "currency": {
-    "code": "EUR",
-    "rate": 1.0631
-  },
-  "distanceFromBuenosAires": 10270,
-  "coordinates": {
-    "latitude": 40,
-    "longitude": -4
+  "isSuccess": true,
+  "error": null,
+  "data": {
+    "ip": "2800:2201:4000:727:2069:b178:5f57:77e1",
+    "currentDate": "2025-06-09T06:34:45.032Z",
+    "countryName": "Argentina",
+    "isoCode": "AR",
+    "languages": [
+      "es"
+    ],
+    "currency": "ARS",
+    "currentTimes": [
+      "UTC−03:00"
+    ],
+    "exchangeRateToUSD": 1.0631,
+    "distanceToBuenosAiresKm": 0,
+    "latitude": -34,
+    "longitude": -64
   }
 }
 ```
@@ -136,10 +141,21 @@ GET /api/statistics
 **Ejemplo de respuesta:**
 ```json
 {
-  "maxDistance": 15420.5,
-  "minDistance": 203.1,
-  "averageDistance": 5254.3,
-  "totalRequests": 150
+  "isSuccess": true,
+  "error": null,
+  "data": {
+    "maxDistanceCountry": {
+      "countryName": "España (ES)",
+      "distanceToBuenosAiresKm": 10000,
+      "invocationTimes": 1
+    },
+    "minDistanceCountry": {
+      "countryName": "Argentina (AR)",
+      "distanceToBuenosAiresKm": 0,
+      "invocationTimes": 2
+    },
+    "averageDistanceInvocations": 3333
+  }
 }
 ```
 
@@ -156,31 +172,7 @@ La documentación interactiva está disponible en `/swagger` donde se puede:
 ```bash
 # Ejecutar todos los tests
 dotnet test
-
-# Con reporte detallado
-dotnet test --logger "console;verbosity=detailed"
-
-# Con cobertura
-dotnet test --collect:"XPlat Code Coverage"
 ```
-
-### Estructura de Tests
-- **Tests Unitarios**: Casos de uso y lógica de dominio
-- **Tests de Integración**: Controllers y servicios externos
-- **Mocks**: Para APIs externas y bases de datos
-
-
-## 📊 Características Técnicas
-
-### Performance
-- **Caché en Redis** para información de países (datos estáticos)
-- **Connection pooling** para APIs externas
-- **Operaciones asíncronas** para mejorar throughput
-
-### Escalabilidad
-- **Arquitectura desacoplada** facilita escalar componentes independientemente
-- **Estadísticas optimizadas** para soportar alto volumen de consultas
-- **Contenedores Docker** para despliegue cloud-native
 
 ## 🤝 Contribución
 
