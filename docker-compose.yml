@@ -18,9 +18,9 @@ services:
       - ExternalAPIKeys__Fixer=${FIXER};
     depends_on:
       sqlserver:
-        condition: service_started # service_healthy
+        condition: service_started
       redis:
-        condition: service_started #service_healthy
+        condition: service_started
     restart: unless-stopped
     networks:
       - app-network
@@ -40,12 +40,6 @@ services:
     networks:
       - app-network
     restart: unless-stopped
-    # healthcheck:
-    #     test: ["CMD-SHELL", "echo 'SELECT 1' | /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P \"$DB_PASSWORD\""]
-    #     interval: 30s
-    #     timeout: 10s
-    #     retries: 5
-    #     start_period: 60s
 
   # Redis para caché
   redis:
@@ -58,11 +52,6 @@ services:
     networks:
       - app-network
     restart: unless-stopped
-    # healthcheck:
-    #   test: ["CMD", "redis-cli", "ping"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
 
 volumes:
   sqlserver_data:
