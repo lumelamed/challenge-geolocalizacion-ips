@@ -1,6 +1,8 @@
 ﻿namespace WebApi.Middlewares
 {
-    using Microsoft.AspNetCore.Mvc;
+    using Application.Exceptions;
+    using Domain.Abstractions;
+    using Infrastructure.Exceptions;
 
     public class ExceptionHandlingMiddleware
     {
@@ -24,18 +26,34 @@
             {
                 this.logger.LogError(ex, $"Ocurrió una excepción: {ex.Message}");
 
-                var problemDetails = new ProblemDetails
-                {
-                    Status = StatusCodes.Status500InternalServerError,
-                    Type = ex.GetType().FullName,
-                    Title = ex.Message,
-                    Detail = ex.StackTrace,
-                };
+                var (statusCode, error) = MapExceptionToError(ex);
 
-                context.Response.StatusCode = problemDetails.Status.Value;
+                context.Response.StatusCode = statusCode;
 
-                await context.Response.WriteAsJsonAsync(problemDetails);
+                await context.Response.WriteAsJsonAsync(ApiResponse.Failure(error));
             }
+        }
+
+        private static (int statusCode, ApiError error) MapExceptionToError(Exception ex)
+        {
+            return ex switch
+            {
+                ArgumentException e => (
+                    StatusCodes.Status400BadRequest,
+                    new ApiError("INVALID_INPUT", e.Message)),
+                CountryNotFoundException e => (
+                    StatusCodes.Status404NotFound,
+                    new ApiError("COUNTRY_NOT_FOUND", e.Message)),
+                StatisticsNotAvailableException e => (
+                    StatusCodes.Status404NotFound,
+                    new ApiError("STATS_NOT_AVAILABLE", e.Message)),
+                ExternalServiceException e => (
+                    StatusCodes.Status503ServiceUnavailable,
+                    new ApiError("EXTERNAL_SERVICE_ERROR", "Uno de los servicios externos no está disponible.")),
+                _ => (
+                    StatusCodes.Status500InternalServerError,
+                    new ApiError("GENERIC_FAILURE", ex.Message))
+            };
         }
     }
 }

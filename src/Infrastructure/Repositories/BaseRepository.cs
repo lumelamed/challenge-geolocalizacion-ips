@@ -25,11 +25,6 @@
             await this.DbContext.AddRangeAsync(entity, cancellationToken);
         }
 
-        public void Update(T entity)
-        {
-            this.DbContext.Update(entity);
-        }
-
         public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await this.DbContext.Set<T>().ToListAsync(cancellationToken);
@@ -38,11 +33,6 @@
         public async Task<T?> FindOneAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return await this.DbContext.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
-        }
-
-        public void Remove(T entity)
-        {
-            this.DbContext.Remove(entity);
         }
     }
 }

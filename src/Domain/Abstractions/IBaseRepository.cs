@@ -13,7 +13,5 @@
         Task AddRangeAsync(IEnumerable<T> entity, CancellationToken cancellationToken = default);
 
         Task AddAsync(T entity, CancellationToken cancellationToken = default);
-
-        void Remove(T entity);
     }
 }

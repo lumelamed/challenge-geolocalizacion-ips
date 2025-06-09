@@ -12,7 +12,7 @@
             builder.Property(x => x.ISOCode).HasMaxLength(3);
             builder.Property(x => x.Languages).HasMaxLength(250);
             builder.Property(x => x.Currency).HasMaxLength(10);
-            builder.Property(x => x.TimeZone).HasMaxLength(100);
+            builder.Property(x => x.Timezones).HasMaxLength(250);
 
             builder.Property(x => x.Latitude).HasPrecision(5, 2);
             builder.Property(x => x.Longitude).HasPrecision(5, 2);

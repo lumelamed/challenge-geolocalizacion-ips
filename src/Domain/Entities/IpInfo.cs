@@ -6,7 +6,7 @@
     {
         required public string IP { get; set; }
 
-        required public int CountryId { get; set; }
+        public int CountryId { get; set; }
 
         public Country? Country { get; set; }
 

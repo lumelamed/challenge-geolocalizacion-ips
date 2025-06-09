@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace Application.DTOs.ExternalAPIs
 {
     public class RateResultDTO
     {

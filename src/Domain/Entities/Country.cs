@@ -8,16 +8,15 @@
 
         required public string ISOCode { get; set; }
 
-        // Maybe in the future this could be another entity
         public string? Languages { get; set; }
+
+        required public string Timezones { get; set; }
 
         required public double Latitude { get; set; }
 
         required public double Longitude { get; set; }
 
         required public string Currency { get; set; }
-
-        required public string TimeZone { get; set; }
 
         required public int DistanceToBuenosAiresInKm { get; set; }
 
