@@ -14,7 +14,7 @@
         {
             this.httpClientService = httpClientService;
 
-            var section = config.GetSection("ExternalAPIKeys:CountryLayer:ApiKey");
+            var section = config.GetSection("ExternalAPIKeys:CountryLayer");
 
             if (section?.Value == null)
             {
@@ -45,7 +45,7 @@
             {
                 ISOCode = isoCode,
                 Name = name ?? "PAIS NO DISPONIBLE",
-                CurrencyCode = currencyCode ?? "USD",
+                CurrencyCode = currencyCode,
                 Languages = languages ?? [],
                 Timezones = timezones ?? [],
                 Latitude = latlng?[0],

@@ -2,10 +2,10 @@
 {
     public class CountryStatisticsDTO
     {
-        required public string CountryName { get; set; }
+        public string CountryName { get; set; } = "PAIS NO ENCONTRADO";
 
-        required public int DistanceToBuenosAiresKm { get; set; }
+        public int DistanceToBuenosAiresKm { get; set; } = 0;
 
-        required public int InvocationTimes { get; set; }
+        public int InvocationTimes { get; set; } = 0;
     }
 }

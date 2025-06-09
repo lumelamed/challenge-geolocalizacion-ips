@@ -1,3 +1,4 @@
+using Application;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -12,6 +13,7 @@ builder.Configuration.AddEnvironmentVariables();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 var redisConnection = builder.Configuration.GetConnectionString("Redis") ?? string.Empty;
 
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(connectionString);
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(provider =>

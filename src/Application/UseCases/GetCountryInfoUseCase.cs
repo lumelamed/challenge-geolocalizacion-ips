@@ -36,7 +36,7 @@
 
             if (country is null)
             {
-                var countryInfo = await this.IpLocationService.GetCountryInfoByCode(ip);
+                var countryInfo = await this.IpLocationService.GetCountryInfoByCode(countryCode);
 
                 country = new Country
                 {

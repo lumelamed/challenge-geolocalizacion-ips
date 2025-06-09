@@ -1,8 +1,10 @@
 ﻿namespace Infrastructure
 {
     using Application.Interfaces;
+    using Domain.Abstractions;
     using Domain.Interfaces;
     using Infrastructure.Repositories;
+    using Infrastructure.Services;
     using Infrastructure.Services.External;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +33,10 @@
             services.AddScoped<IIpApiClient, IpLocationClient>();
             services.AddScoped<ICurrencyApiClient, FixerClient>();
             services.AddScoped<ICountryApiClient, CountryLayerClient>();
+            services.AddScoped<HttpClientService>();
+
+            services.AddScoped<IGeoDistanceService, GeoDistanceService>();
+            services.AddScoped<ILocationService, LocationService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -39,6 +45,7 @@
 
             services.AddScoped<IIpInfoRepository, IpInfoRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

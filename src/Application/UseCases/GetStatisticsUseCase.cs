@@ -2,6 +2,7 @@
 {
     using System.Threading.Tasks;
     using Application.DTOs.Responses;
+    using Application.Exceptions;
     using Domain.Abstractions;
 
     public class GetStatisticsUseCase
@@ -15,12 +16,28 @@
 
         public async Task<StatisticsResponseDTO> ExecuteAsync(CancellationToken cancellationToken)
         {
-            // TODO
+            var stats = await this.UnitOfWork.IpInfoRepository.GetStatisticsAsync(cancellationToken);
+
+            if (stats is null)
+            {
+                throw new StatisticsNotAvailableException();
+            }
+
             return new StatisticsResponseDTO
             {
-                AverageDistanceInvocations = 0,
-                MaxDistanceCountry = new CountryStatisticsDTO { CountryName = string.Empty, DistanceToBuenosAiresKm = 0, InvocationTimes = 0 },
-                MinDistanceCountry = new CountryStatisticsDTO { CountryName = string.Empty, DistanceToBuenosAiresKm = 0, InvocationTimes = 0 },
+                AverageDistanceInvocations = stats.AverageDistanceInvocations,
+                MaxDistanceCountry = new CountryStatisticsDTO
+                {
+                    CountryName = $"{stats.MaxCountryName} ({stats.MaxCountryCode})",
+                    DistanceToBuenosAiresKm = stats.MaxDistanceToBuenosAiresKm,
+                    InvocationTimes = stats.MaxInvocationTimes,
+                },
+                MinDistanceCountry = new CountryStatisticsDTO
+                {
+                    CountryName = $"{stats.MinCountryName} ({stats.MinCountryCode})",
+                    DistanceToBuenosAiresKm = stats.MinDistanceToBuenosAiresKm,
+                    InvocationTimes = stats.MinInvocationTimes,
+                },
             };
         }
     }

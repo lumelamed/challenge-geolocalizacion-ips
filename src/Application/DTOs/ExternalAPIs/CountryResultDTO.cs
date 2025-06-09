@@ -8,7 +8,7 @@
 
         public List<string?> Languages { get; set; } = [];
 
-        required public string CurrencyCode { get; set; }
+        public string? CurrencyCode { get; set; }
 
         public List<string?> Timezones { get; set; } = [];
 

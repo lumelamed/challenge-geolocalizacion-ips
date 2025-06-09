@@ -17,7 +17,7 @@
         {
             this.httpClientService = httpClientService;
 
-            var section = config.GetSection("ExternalAPIKeys:Fixer:ApiKey");
+            var section = config.GetSection("ExternalAPIKeys:Fixer");
 
             if (section?.Value == null)
             {
