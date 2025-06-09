@@ -1,7 +1,9 @@
 ﻿namespace Infrastructure
 {
+    using Application.Interfaces;
     using Domain.Interfaces;
     using Infrastructure.Repositories;
+    using Infrastructure.Services.External;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -25,6 +27,10 @@
             {
                 c.BaseAddress = new Uri("https://api.countrylayer.com/v2/");
             });
+
+            services.AddScoped<IIpApiClient, IpLocationClient>();
+            services.AddScoped<ICurrencyApiClient, FixerClient>();
+            services.AddScoped<ICountryApiClient, CountryLayerClient>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
