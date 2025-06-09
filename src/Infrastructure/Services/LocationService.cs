@@ -39,9 +39,6 @@
         public async Task<CountryInfoDTO> GetCountryInfoByCode(string countryCode)
         {
             var country = await this.CountryApiClient.GetCountryAsync(countryCode);
-            var rate = await this.CurrencyApiClient.GetDollarExchangeRateAsync(country.CurrencyCode);
-
-            var distance = this.GeoDistanceService.CalculateEstimatedDistanceToBuenosAiresKm(country.Latitude, country.Longitude);
 
             return new CountryInfoDTO
             {
@@ -52,7 +49,9 @@
                 Currency = country.CurrencyCode,
                 Latitude = country.Latitude,
                 Longitude = country.Longitude,
-                DistanceToBuenosAiresKm = distance,
+                DistanceToBuenosAiresKm = country.Latitude.HasValue && country.Longitude.HasValue
+                ? this.GeoDistanceService.CalculateEstimatedDistanceToBuenosAiresKm(country.Latitude.Value, country.Longitude.Value)
+                : null,
             };
         }
     }

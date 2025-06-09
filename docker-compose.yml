@@ -12,7 +12,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=http://+:80 #;https://+:443
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
-      - ConnectionStrings__Redis=redis:6379;
+      - ConnectionStrings__Redis=${REDIS_CONNECTION}; #redis:6379;
+      - ExternalAPIKeys__IpApi=${IP_API};
+      - ExternalAPIKeys__CountryLayer=${COUNTRY_LAYER};
+      - ExternalAPIKeys__Fixer=${FIXER};
     depends_on:
       sqlserver:
         condition: service_started # service_healthy

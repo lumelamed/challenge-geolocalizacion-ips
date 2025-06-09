@@ -31,11 +31,10 @@ namespace Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Currency")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<int>("DistanceToBuenosAiresInKm")
+                    b.Property<int?>("DistanceToBuenosAiresInKm")
                         .HasPrecision(5, 2)
                         .HasColumnType("int");
 
@@ -48,11 +47,11 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<double>("Latitude")
+                    b.Property<double?>("Latitude")
                         .HasPrecision(5, 2)
                         .HasColumnType("float(5)");
 
-                    b.Property<double>("Longitude")
+                    b.Property<double?>("Longitude")
                         .HasPrecision(5, 2)
                         .HasColumnType("float(5)");
 
@@ -62,7 +61,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Timezones")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 

@@ -10,15 +10,15 @@
 
         public string? Languages { get; set; }
 
-        required public string Timezones { get; set; }
+        public string? Timezones { get; set; }
 
-        required public double Latitude { get; set; }
+        public double? Latitude { get; set; }
 
-        required public double Longitude { get; set; }
+        public double? Longitude { get; set; }
 
-        required public string Currency { get; set; }
+        public string? Currency { get; set; }
 
-        required public int DistanceToBuenosAiresInKm { get; set; }
+        public int? DistanceToBuenosAiresInKm { get; set; }
 
         public List<IpInfo>? IpInfoRequests { get; set; } = [];
     }

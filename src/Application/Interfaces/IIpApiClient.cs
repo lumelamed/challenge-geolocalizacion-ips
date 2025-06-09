@@ -4,6 +4,6 @@
 
     public interface IIpApiClient
     {
-        Task<IpLocationResultDTO> GetLocationAsync(string ip);
+        Task<IpLocationResultDTO?> GetLocationAsync(string ip);
     }
 }

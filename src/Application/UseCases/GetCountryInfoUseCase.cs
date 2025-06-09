@@ -1,6 +1,7 @@
 ﻿namespace Application.UseCases
 {
     using System;
+    using System.Net;
     using System.Threading.Tasks;
     using Application.DTOs.Responses;
     using Application.Exceptions;
@@ -45,8 +46,8 @@
                     ISOCode = countryInfo.ISOCode,
                     Latitude = countryInfo.Latitude,
                     Longitude = countryInfo.Longitude,
-                    Languages = string.Join(",", countryInfo.Languages),
-                    Timezones = string.Join(",", countryInfo.Timezones),
+                    Languages = countryInfo.Languages is not null && countryInfo.Languages.Count != 0 ? string.Join(",", countryInfo.Languages) : null,
+                    Timezones = countryInfo.Timezones is not null && countryInfo.Timezones.Count != 0 ? string.Join(",", countryInfo.Timezones) : null,
                 };
 
                 await this.UnitOfWork.CountryRepository.AddAsync(country, cancellationToken);
@@ -62,7 +63,9 @@
             await this.UnitOfWork.IpInfoRepository.AddAsync(query, cancellationToken);
             await this.UnitOfWork.SaveAsync(cancellationToken);
 
-            var rate = await this.IpLocationService.GetDollarExchangeRateByCurrencyCode(country.Currency);
+            var rate = !string.IsNullOrWhiteSpace(country.Currency)
+                ? await this.IpLocationService.GetDollarExchangeRateByCurrencyCode(country.Currency)
+                : null;
 
             return new IpInfoResponseDTO
             {
@@ -70,8 +73,8 @@
                 CountryName = country.Name,
                 ISOCode = country.ISOCode,
                 Currency = country.Currency,
-                CurrentTimes = [.. country.Timezones.Split(",").Select(x => TimeOnly.FromDateTime(TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(x))))],
-                Languages = country.Languages?.Split(",")?.ToList() ?? new List<string>(),
+                CurrentTimes = country.Timezones is null ? [] : [.. country.Timezones.Split(",").Select(x => TimeOnly.FromDateTime(TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(x))))],
+                Languages = country.Languages?.Split(",")?.ToList() ?? [],
                 Latitude = country.Latitude,
                 Longitude = country.Longitude,
                 DistanceToBuenosAiresKm = country.DistanceToBuenosAiresInKm,
@@ -81,7 +84,7 @@
 
         private static bool IsValidIp(string ip)
         {
-            return System.Net.IPAddress.TryParse(ip, out _);
+            return IPAddress.TryParse(ip, out _);
         }
     }
 }

@@ -11,6 +11,21 @@
             this IServiceCollection services,
             string connectionString)
         {
+            services.AddHttpClient("FixerClient", c =>
+            {
+                c.BaseAddress = new Uri("https://data.fixer.io/api/");
+            });
+
+            services.AddHttpClient("IpLocationClient", c =>
+            {
+                c.BaseAddress = new Uri("https://api.ipapi.com/");
+            });
+
+            services.AddHttpClient("CountryLayerClient", c =>
+            {
+                c.BaseAddress = new Uri("https://api.countrylayer.com/v2/");
+            });
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
